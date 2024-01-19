@@ -1,19 +1,17 @@
 using BepInEx;
 using RoR2;
 
-namespace ModTemplate
+namespace ModTemplate;
+[BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+
+public class Main : BaseUnityPlugin
 {
-    [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+    public const string PluginGUID = PluginAuthor + "." + PluginName;
+    public const string PluginAuthor = "MarkTullius";
+    public const string PluginName = "BlindItems";
+    public const string PluginVersion = "0.0.1";
 
-    public class Main : BaseUnityPlugin
+    public void Awake()
     {
-        public const string PluginGUID = PluginAuthor + "." + PluginName;
-        public const string PluginAuthor = "MarkTullius";
-        public const string PluginName = "BlindItems";
-        public const string PluginVersion = "0.0.1";
-
-        public void Awake()
-        {
-        }
     }
 }
