@@ -18,6 +18,8 @@ public class ItemAddressables{
   // public Sprite voidBossSprite = Addressables.LoadAssetAsync<Sprite>("Assets/RoR2/Junk_DLC1/Items/ScrapVoid/texVoidScrapIcon.png").WaitForCompletion();
   // TODO: Add lunar sprite
   // public Sprite lunarSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapWhiteIcon.png").WaitForCompletion();
+  // TODO: Add equipment sprite
+  // public Sprite equipSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapWhiteIcon.png").WaitForCompletion();
 
   // Pickup models
   public GameObject scrapPrefab = Addressables.LoadAssetAsync<ItemDef>("RoR2/Base/Scrap/ScrapWhite.asset").WaitForCompletion().pickupModelPrefab;

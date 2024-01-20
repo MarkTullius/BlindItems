@@ -2,7 +2,7 @@
   "name": "BlindItems",
   "author": "MarkTullius",
   "authorName": "MarkTullius",
-  "version_number": "0.1.1",
+  "version_number": "0.3.0",
   "website_url": "",
   "description": "Obscures the pickup models (and also inventory icons if configured) by replacing them with scrap to add a cursed challenge where you don't know what you're picking up (scrapping/printing) until you have done so.",
   "dependencies": [

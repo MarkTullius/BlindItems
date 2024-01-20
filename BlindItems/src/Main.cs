@@ -1,26 +1,31 @@
 using BepInEx;
-using BlindItems;
 using RoR2;
 using UnityEngine;
+using System.Collections.Generic;
 
-namespace ModTemplate;
+namespace BlindItems;
 [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
 public class Main : BaseUnityPlugin{
   public const string PluginGUID = PluginAuthor + "." + PluginName;
   public const string PluginAuthor = "MarkTullius";
   public const string PluginName = "BlindItems";
-  public const string PluginVersion = "0.1.1";
+  public const string PluginVersion = "0.3.0";
   
   public const string itemName = "???";
   private const string itemDescription = "?????";
   public ItemAddressables _addressables;
-  public NotificationInfo _notificationInfo;
+  public List<ItemDef> itemNotifications;
+  public List<EquipmentDef> equipNotifications;
 
   public void Awake(){
     _addressables = new ItemAddressables();
-    _notificationInfo = new NotificationInfo();
+    itemNotifications = new List<ItemDef>();
+    equipNotifications = new List<EquipmentDef>();
     On.RoR2.ItemCatalog.SetItemDefs += ObfuscateItems;
+    On.RoR2.EquipmentCatalog.SetEquipmentDefs += ObfuscateEquipments;
+    On.RoR2.CharacterMasterNotificationQueue.PushItemNotification += PushItemNotification;
+    On.RoR2.CharacterMasterNotificationQueue.PushEquipmentNotification += PushEquipmentNotification;
   }
 
   public void ObfuscateItems(On.RoR2.ItemCatalog.orig_SetItemDefs orig, ItemDef[] itemDefs)
@@ -28,11 +33,13 @@ public class Main : BaseUnityPlugin{
     orig(itemDefs);
     foreach (ItemDef itemDef in itemDefs)
     {
-      _notificationInfo.ItemInfos.Add(new ItemInfo{
+      itemNotifications.Add(new ItemDef
+      {
         itemIndex = itemDef.itemIndex,
-        icon = itemDef.pickupIconSprite,
-        name = itemDef.nameToken,
-        pickupToken = itemDef.pickupToken
+        pickupIconSprite = itemDef.pickupIconSprite,
+        nameToken = itemDef.nameToken,
+        pickupToken = itemDef.pickupToken,
+        descriptionToken = itemDef.descriptionToken
       });
 
   #pragma warning disable CS0618 // 'ItemDef.deprecatedTier' is incorrectly marked as obsolete
@@ -72,7 +79,7 @@ public class Main : BaseUnityPlugin{
           itemDef.pickupModelPrefab = _addressables.voidRedPrefab;
           break;
         case ItemTier.VoidBoss:
-          itemDef.pickupIconSprite = _addressables.voidRedSprite;
+          // itemDef.pickupIconSprite = _addressables.voidRedSprite;
           itemDef.pickupModelPrefab = _addressables.voidBossPrefab;
           break;
       }
@@ -80,6 +87,64 @@ public class Main : BaseUnityPlugin{
       itemDef.nameToken = itemName;
       itemDef.pickupToken = itemDescription;
       itemDef.descriptionToken = itemDescription;
+    }
+  }
+
+  public void ObfuscateEquipments(On.RoR2.EquipmentCatalog.orig_SetEquipmentDefs orig, EquipmentDef[] equipDefs)
+  {
+    orig(equipDefs);
+    foreach (EquipmentDef equipDef in equipDefs)
+    {
+      equipNotifications.Add(new EquipmentDef
+      {
+        equipmentIndex = equipDef.equipmentIndex,
+        pickupIconSprite = equipDef.pickupIconSprite,
+        nameToken = equipDef.nameToken,
+        pickupToken = equipDef.pickupToken,
+        descriptionToken = equipDef.descriptionToken
+      });
+
+      equipDef.pickupIconSprite = _addressables.whiteSprite;
+      equipDef.pickupModelPrefab = _addressables.scrapPrefab;
+      equipDef.nameToken = itemName;
+      equipDef.pickupToken = itemDescription;
+      equipDef.descriptionToken = itemDescription;
+    }
+  }
+
+  public void PushItemNotification(On.RoR2.CharacterMasterNotificationQueue.orig_PushItemNotification orig, CharacterMaster characterMaster, ItemIndex itemIndex)
+  {
+    orig(characterMaster, ItemIndex.None);
+    ItemDef itemDef = itemNotifications.Find(itemDef => itemDef.itemIndex == itemIndex);
+    if (!characterMaster.hasAuthority){
+      Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
+      return;
+    }
+    CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
+    if (notificationQueueForMaster && itemIndex != ItemIndex.None){
+      if (itemDef == null || itemDef.hidden){
+        return;
+      }
+      float duration = 6f;
+      notificationQueueForMaster.PushNotification(new CharacterMasterNotificationQueue.NotificationInfo(itemDef, null), duration);
+    }
+  }
+
+  public void PushEquipmentNotification(On.RoR2.CharacterMasterNotificationQueue.orig_PushEquipmentNotification orig, CharacterMaster characterMaster, EquipmentIndex equipmentIndex)
+  {
+    orig(characterMaster, EquipmentIndex.None);
+    EquipmentDef equipDef = equipNotifications.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);
+    if (!characterMaster.hasAuthority){
+      Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
+      return;
+    }
+    CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
+    if (notificationQueueForMaster && equipmentIndex != EquipmentIndex.None){
+      if (equipDef == null){
+        return;
+      }
+      float duration = 6f;
+      notificationQueueForMaster.PushNotification(new CharacterMasterNotificationQueue.NotificationInfo(equipDef, null), duration);
     }
   }
 }
