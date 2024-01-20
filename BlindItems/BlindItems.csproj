@@ -18,7 +18,7 @@
 
         <Copy SourceFiles="..\README.md" DestinationFolder="@(Assembly)" />
         <Copy SourceFiles="@(Resources)" DestinationFolder="@(Assembly)" />
-        <Copy SourceFiles="$(OutputPath)Template.dll" DestinationFolder="@(Assembly)" />
+        <Copy SourceFiles="$(OutputPath)BlindItems.dll" DestinationFolder="@(Assembly)" />
         <ZipDirectory Overwrite="True" SourceDirectory="@(Assembly)" DestinationFile="dist\$(ProjectName).zip" />
     </Target>
 
