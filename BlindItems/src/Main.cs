@@ -10,7 +10,7 @@ public class Main : BaseUnityPlugin{
   public const string PluginGUID = PluginAuthor + "." + PluginName;
   public const string PluginAuthor = "MarkTullius";
   public const string PluginName = "BlindItems";
-  public const string PluginVersion = "0.1.0";
+  public const string PluginVersion = "0.1.1";
   
   public const string itemName = "???";
   private const string itemDescription = "?????";

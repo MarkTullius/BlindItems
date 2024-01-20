@@ -1,5 +1,9 @@
 # Changelog
 
+**0.1.1**
+
+-   Correct path to void scrap icons
+
 **0.1.0**
 
 -   Replace item pickup model, icon, name and description with scrap and "???"
