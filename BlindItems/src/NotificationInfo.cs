@@ -17,5 +17,4 @@ public struct ItemInfo{
     public Sprite icon { get; set; }
     public string name { get; set; }
     public string pickupToken { get; set; }
-    public string description { get; set; }
 }

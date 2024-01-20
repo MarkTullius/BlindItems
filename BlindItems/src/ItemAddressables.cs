@@ -14,9 +14,10 @@ public class ItemAddressables{
   public Sprite voidWhiteSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapWhiteIcon.png").WaitForCompletion();
   public Sprite voidGreenSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapGreenIcon.png").WaitForCompletion();
   public Sprite voidRedSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapRedIcon.png").WaitForCompletion();
-  public Sprite voidBossSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapIcon.png").WaitForCompletion();
+  // TODO: Add void boss sprite
+  // public Sprite voidBossSprite = Addressables.LoadAssetAsync<Sprite>("Assets/RoR2/Junk_DLC1/Items/ScrapVoid/texVoidScrapIcon.png").WaitForCompletion();
   // TODO: Add lunar sprite
-  //public Sprite lunarSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapWhiteIcon.png").WaitForCompletion();
+  // public Sprite lunarSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapWhiteIcon.png").WaitForCompletion();
 
   // Pickup models
   public GameObject scrapPrefab = Addressables.LoadAssetAsync<ItemDef>("RoR2/Base/Scrap/ScrapWhite.asset").WaitForCompletion().pickupModelPrefab;

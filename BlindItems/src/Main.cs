@@ -32,8 +32,7 @@ public class Main : BaseUnityPlugin{
         itemIndex = itemDef.itemIndex,
         icon = itemDef.pickupIconSprite,
         name = itemDef.nameToken,
-        pickupToken = itemDef.pickupToken,
-        description = itemDef.descriptionToken
+        pickupToken = itemDef.pickupToken
       });
 
   #pragma warning disable CS0618 // 'ItemDef.deprecatedTier' is incorrectly marked as obsolete
