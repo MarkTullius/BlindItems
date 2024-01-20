@@ -11,10 +11,10 @@ public class ItemAddressables{
   public Sprite greenSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapGreenIcon.png").WaitForCompletion();
   public Sprite redSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapRedIcon.png").WaitForCompletion();
   public Sprite bossSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapYellowIcon.png").WaitForCompletion();
-  public Sprite voidWhiteSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ScrapVoid/texVoidScrapWhiteIcon.png").WaitForCompletion();
-  public Sprite voidGreenSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ScrapVoid/texVoidScrapGreenIcon.png").WaitForCompletion();
-  public Sprite voidRedSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/ScrapVoid/texVoidScrapRedIcon.png").WaitForCompletion();
-  public Sprite voidBossSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texVoidScrapIcon.png").WaitForCompletion();
+  public Sprite voidWhiteSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapWhiteIcon.png").WaitForCompletion();
+  public Sprite voidGreenSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapGreenIcon.png").WaitForCompletion();
+  public Sprite voidRedSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapRedIcon.png").WaitForCompletion();
+  public Sprite voidBossSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ScrapVoid/texVoidScrapIcon.png").WaitForCompletion();
   // TODO: Add lunar sprite
   //public Sprite lunarSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapWhiteIcon.png").WaitForCompletion();
 
