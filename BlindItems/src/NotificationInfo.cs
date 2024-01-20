@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace BlindItems;
 
-using System.Linq;
-
-public class NotificationInfo
-{
+public class NotificationInfo{
     public List<ItemInfo> ItemInfos { get; set; }
 
     public NotificationInfo(){
