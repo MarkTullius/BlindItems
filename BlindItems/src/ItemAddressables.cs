@@ -22,4 +22,8 @@ public class ItemAddressables{
   public Sprite lunarSprite = assets.LoadAsset<Sprite>("texScrapLunarIcon.png");
   public Sprite equipSprite = assets.LoadAsset<Sprite>("texScrapEquipmentIcon.png");
   public Sprite voidBossSprite = assets.LoadAsset<Sprite>("texVoidScrapBossIcon.png");
+
+  // Risk of Options mod icon
+  public static Sprite modIcon = assets.LoadAsset<Sprite>("modIcon.png");
+
 }

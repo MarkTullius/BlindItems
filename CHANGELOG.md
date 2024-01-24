@@ -1,5 +1,9 @@
 # Changelog
 
+**0.4.1**
+
+-   Add mod icon to Risk of Options
+
 **0.4.0**
 
 -   Replace scrap pickup models with "?"

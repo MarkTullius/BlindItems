@@ -14,7 +14,7 @@ public class Main : BaseUnityPlugin{
   public const string PluginGUID = PluginAuthor + "." + PluginName;
   public const string PluginAuthor = "MarkTullius";
   public const string PluginName = "BlindItems";
-  public const string PluginVersion = "0.4.0";
+  public const string PluginVersion = "0.4.1";
 
   public static ConfigEntry<bool> RandomiseOrder { get; set; }
   public static ConfigEntry<bool> ObscureEquipment { get; set; }
@@ -25,6 +25,7 @@ public class Main : BaseUnityPlugin{
   private PrinterFix _printerFix;
   public static List<ItemDef> itemNotifications;
   public static List<EquipmentDef> equipNotifications;
+  public const string desc = "Obscures the pickup models and inventory icons, for items and equipments, by replacing them with '?' to add a cursed challenge where you don't know what you're picking up (scrapping/printing) until you have done so.";
 
   public void Awake(){
     InitConfig();
@@ -61,6 +62,8 @@ public class Main : BaseUnityPlugin{
   }
 
   public void BuildSettings(){
+    ModSettingsManager.SetModDescription(desc, PluginGUID, PluginName);
+    ModSettingsManager.SetModIcon(ItemAddressables.modIcon);
     ModSettingsManager.AddOption(new CheckBoxOption(RandomiseOrder));
     ModSettingsManager.AddOption(new CheckBoxOption(ObscureEquipment, true));
 }
