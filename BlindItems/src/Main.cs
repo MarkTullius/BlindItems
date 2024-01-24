@@ -5,6 +5,7 @@ using BepInEx.Configuration;
 using System.Collections.Generic;
 using RiskOfOptions;
 using RiskOfOptions.Options;
+using UnityEngine;
 
 namespace BlindItems;
 [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
@@ -27,12 +28,19 @@ public class Main : BaseUnityPlugin{
 
   public void Awake(){
     InitConfig();
-    if (Chainloader.PluginInfos.ContainsKey("com.rune580.riskofoptions"))
-        BuildSettings();
+    // Only set up Risk of Options settings if the mod is installed
+    if (Chainloader.PluginInfos.ContainsKey("com.rune580.riskofoptions")){
+      BuildSettings();
+    }
+    else{
+      Debug.Log("Risk of Options is not installed, skipping setup.");
+    }
+
     itemNotifications = new List<ItemDef>();
     equipNotifications = new List<EquipmentDef>();
-    _obfuscate = new Obfuscate();
-    _notifs = new Notifications();
+
+    _obfuscate = new Obfuscate(itemNotifications, equipNotifications);
+    _notifs = new Notifications(itemNotifications, equipNotifications);
     _randomise = new Randomise();
     _printerFix = new PrinterFix();
   }

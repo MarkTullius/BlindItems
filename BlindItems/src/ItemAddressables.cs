@@ -7,7 +7,7 @@ namespace BlindItems;
 
 public class ItemAddressables{
   // Custom assets to obscure equipments, lunars and void boss items
-  public static AssetBundle assets = AssetBundle.LoadFromFile(System.IO.Path.Combine(Paths.PluginPath, "MarkTullius-BlindItems/blinditemsbundle"));
+  public static readonly AssetBundle assets = AssetBundle.LoadFromFile(System.IO.Path.Combine(Paths.PluginPath, "MarkTullius-BlindItems/blinditemsbundle"));
 
   // Inventory icons
   public Sprite whiteSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Scrap/texScrapWhiteIcon.png").WaitForCompletion();

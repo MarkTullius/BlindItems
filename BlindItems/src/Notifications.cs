@@ -5,33 +5,32 @@ using System.Collections.Generic;
 namespace BlindItems;
 
 public class Notifications{
-  List<ItemDef> items = Main.itemNotifications;
-  List<EquipmentDef> equips = Main.equipNotifications;
+  List<ItemDef> itemNotifications;
+  List<EquipmentDef> equipNotifications;
+  private const float AddedNotificationDuration = 6f;
+  private const float RemovedNotificationDuration = 3f;
 
-  public Notifications(){
-    Awake(items, equips);
+  public Notifications(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications){
+    this.itemNotifications = itemNotifications;
+    this.equipNotifications = equipNotifications;
+    Awake();
   }
 
-  public void Awake(List<ItemDef> items, List<EquipmentDef> equips){
-    PushItemNotification(items);
+  public void Awake(){
+    PushItemNotification();
     PushItemRemovalNotification();
-    PushEquipmentNotification(equips);
+    PushEquipmentNotification();
   }
 
-  public void PushItemNotification(List<ItemDef> items){
+  public void PushItemNotification(){
     On.RoR2.CharacterMasterNotificationQueue.PushItemNotification += (orig, characterMaster, itemIndex) => {
       orig(characterMaster, ItemIndex.None);
-      ItemDef itemDef = items.Find(itemDef => itemDef.itemIndex == itemIndex);
-      if (!characterMaster.hasAuthority){
-        Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
-        return;
-      }
+
+      ItemDef itemDef = GetItemDef(itemIndex);
       CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
-      if (notificationQueueForMaster && itemIndex != ItemIndex.None){
-        if (itemDef == null || itemDef.hidden){
-          return;
-        }
-        float duration = 6f;
+
+      if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster)){
+        float duration = AddedNotificationDuration;
         notificationQueueForMaster.PushNotification(new CharacterMasterNotificationQueue.NotificationInfo(itemDef, null), duration);
       }
     };
@@ -40,18 +39,13 @@ public class Notifications{
   public void PushItemRemovalNotification(){
     On.RoR2.PurchaseInteraction.CreateItemTakenOrb += (orig, effectOrigin, targetObject, itemIndex) => {
       orig(effectOrigin, targetObject, itemIndex);
+
       CharacterMaster characterMaster = PlayerCharacterMasterController._instances[0].master;
-      ItemDef itemDef = items.Find(itemDef => itemDef.itemIndex == itemIndex);
-      if (!characterMaster.hasAuthority){
-        Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
-        return;
-      }
+      ItemDef itemDef = GetItemDef(itemIndex);
       CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
-      if (notificationQueueForMaster && itemIndex != ItemIndex.None){
-        if (itemDef == null || itemDef.hidden){
-          return;
-        }
-        float duration = 3f;        
+
+      if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster)){
+        float duration = RemovedNotificationDuration;
         CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(
           CharacterMasterNotificationQueue.TransformationType.Suppressed,
           itemDef
@@ -59,14 +53,13 @@ public class Notifications{
         CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(ItemCatalog.GetItemDef(itemIndex), transformation);
         notificationQueueForMaster.PushNotification(info, duration);
       }
-
     };
   }
 
-  public void PushEquipmentNotification(List<EquipmentDef> equips){
+  public void PushEquipmentNotification(){
     On.RoR2.CharacterMasterNotificationQueue.PushEquipmentNotification += (orig, characterMaster, equipmentIndex) => {
       orig(characterMaster, EquipmentIndex.None);
-      EquipmentDef equipDef = equips.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);
+      EquipmentDef equipDef = GetEquipDef(equipmentIndex);
       if (!characterMaster.hasAuthority){
         Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
         return;
@@ -76,9 +69,30 @@ public class Notifications{
         if (equipDef == null){
           return;
         }
-        float duration = 6f;
+        float duration = AddedNotificationDuration;
         notificationQueueForMaster.PushNotification(new CharacterMasterNotificationQueue.NotificationInfo(equipDef, null), duration);
       }
     };
+  }
+
+  public ItemDef GetItemDef(ItemIndex itemIndex){
+    return itemNotifications.Find(itemDef => itemDef.itemIndex == itemIndex);
+  }
+
+  public EquipmentDef GetEquipDef(EquipmentIndex equipmentIndex){
+    return equipNotifications.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);
+  }
+
+  public bool ItemNotificationHandler(CharacterMaster characterMaster, ItemIndex itemIndex, ItemDef itemDef, CharacterMasterNotificationQueue notificationQueue){
+    if (!characterMaster.hasAuthority){
+      Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
+      return false;
+    }
+    if (notificationQueue && itemIndex != ItemIndex.None){
+      if (itemDef == null || itemDef.hidden){
+        return false;
+      }
+    }
+    return true;      
   }
 }
