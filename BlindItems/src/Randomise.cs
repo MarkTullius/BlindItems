@@ -11,20 +11,10 @@ public class Randomise{
 
   public void ShuffleItemOrder(On.RoR2.Stage.orig_Start orig, Stage self){
     orig(self);
-
-    List<ItemIndex> itemOrder = PlayerCharacterMasterController._instances[0].master.inventory.itemAcquisitionOrder;
-    Random random = new Random();
-    int n = itemOrder.Count;
-
-    for (int i = n - 1; i > 0; i--)
-    {
-      int randIndex = random.Next(0, i + 1);
-
-      ItemIndex temp = itemOrder[i];
-      itemOrder[i] = itemOrder[randIndex];
-      itemOrder[randIndex] = temp;
+    if (Main.RandomiseOrder.Value){
+      List<ItemIndex> itemOrder = PlayerCharacterMasterController._instances[0].master.inventory.itemAcquisitionOrder;
+      Util.ShuffleList(itemOrder);
+      PlayerCharacterMasterController._instances[0].master.inventory.itemAcquisitionOrder = itemOrder;
     }
-    
-    PlayerCharacterMasterController._instances[0].master.inventory.itemAcquisitionOrder = itemOrder;
   }
 }

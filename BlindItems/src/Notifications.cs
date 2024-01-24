@@ -14,10 +14,11 @@ public class Notifications{
 
   public void Awake(List<ItemDef> items, List<EquipmentDef> equips){
     PushItemNotification(items);
+    PushItemRemovalNotification();
     PushEquipmentNotification(equips);
   }
-  public void PushItemNotification(List<ItemDef> items)
-  {
+
+  public void PushItemNotification(List<ItemDef> items){
     On.RoR2.CharacterMasterNotificationQueue.PushItemNotification += (orig, characterMaster, itemIndex) => {
       orig(characterMaster, ItemIndex.None);
       ItemDef itemDef = items.Find(itemDef => itemDef.itemIndex == itemIndex);
@@ -36,8 +37,33 @@ public class Notifications{
     };
   }
 
-  public void PushEquipmentNotification(List<EquipmentDef> equips)
-  {
+  public void PushItemRemovalNotification(){
+    On.RoR2.PurchaseInteraction.CreateItemTakenOrb += (orig, effectOrigin, targetObject, itemIndex) => {
+      orig(effectOrigin, targetObject, itemIndex);
+      CharacterMaster characterMaster = PlayerCharacterMasterController._instances[0].master;
+      ItemDef itemDef = items.Find(itemDef => itemDef.itemIndex == itemIndex);
+      if (!characterMaster.hasAuthority){
+        Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
+        return;
+      }
+      CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
+      if (notificationQueueForMaster && itemIndex != ItemIndex.None){
+        if (itemDef == null || itemDef.hidden){
+          return;
+        }
+        float duration = 3f;        
+        CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(
+          CharacterMasterNotificationQueue.TransformationType.Suppressed,
+          itemDef
+        );
+        CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(ItemCatalog.GetItemDef(itemIndex), transformation);
+        notificationQueueForMaster.PushNotification(info, duration);
+      }
+
+    };
+  }
+
+  public void PushEquipmentNotification(List<EquipmentDef> equips){
     On.RoR2.CharacterMasterNotificationQueue.PushEquipmentNotification += (orig, characterMaster, equipmentIndex) => {
       orig(characterMaster, EquipmentIndex.None);
       EquipmentDef equipDef = equips.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);

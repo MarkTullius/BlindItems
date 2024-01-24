@@ -88,7 +88,10 @@ public class Obfuscate{
         equipCopy.pickupToken = equipDef.pickupToken;
         equips.Add(equipCopy);
 
-        equipDef.pickupIconSprite = _addressables.equipSprite;
+        if (Main.ObscureEquipment.Value){
+          equipDef.pickupIconSprite = _addressables.equipSprite;
+        }
+        
         equipDef.pickupModelPrefab = PickupCatalog.GetHiddenPickupDisplayPrefab();
         equipDef.nameToken = itemName;
         equipDef.pickupToken = itemDescription;
