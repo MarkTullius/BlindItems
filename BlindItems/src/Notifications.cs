@@ -26,7 +26,7 @@ public class Notifications{
     On.RoR2.CharacterMasterNotificationQueue.PushItemNotification += (orig, characterMaster, itemIndex) => {
       orig(characterMaster, ItemIndex.None);
 
-      ItemDef itemDef = GetItemDef(itemIndex);
+      ItemDef itemDef = GetOrigItemDef(itemIndex);
       CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
 
       if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster)){
@@ -39,27 +39,34 @@ public class Notifications{
   public void PushItemRemovalNotification(){
     On.RoR2.PurchaseInteraction.CreateItemTakenOrb += (orig, effectOrigin, targetObject, itemIndex) => {
       orig(effectOrigin, targetObject, itemIndex);
-
-      CharacterMaster characterMaster = PlayerCharacterMasterController._instances[0].master;
-      ItemDef itemDef = GetItemDef(itemIndex);
-      CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
-
-      if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster)){
-        float duration = RemovedNotificationDuration;
-        CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(
-          CharacterMasterNotificationQueue.TransformationType.Suppressed,
-          itemDef
-        );
-        CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(ItemCatalog.GetItemDef(itemIndex), transformation);
-        notificationQueueForMaster.PushNotification(info, duration);
-      }
+      BuildItemRemovalNotification(itemIndex);
     };
+    On.RoR2.ScrapperController.CreateItemTakenOrb += (orig, effectOrigin, targetObject, itemIndex) => {
+      orig(effectOrigin, targetObject, itemIndex);
+      BuildItemRemovalNotification(itemIndex);
+    };
+  }
+
+  public void BuildItemRemovalNotification(ItemIndex itemIndex){
+    CharacterMaster characterMaster = PlayerCharacterMasterController._instances[0].master;
+    ItemDef itemDef = GetOrigItemDef(itemIndex);
+    CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
+
+    if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster)){
+      float duration = RemovedNotificationDuration;
+      CharacterMasterNotificationQueue.TransformationInfo transformation = new CharacterMasterNotificationQueue.TransformationInfo(
+        CharacterMasterNotificationQueue.TransformationType.Suppressed,
+        itemDef
+      );
+      CharacterMasterNotificationQueue.NotificationInfo info = new CharacterMasterNotificationQueue.NotificationInfo(ItemCatalog.GetItemDef(itemIndex), transformation);
+      notificationQueueForMaster.PushNotification(info, duration);
+    }
   }
 
   public void PushEquipmentNotification(){
     On.RoR2.CharacterMasterNotificationQueue.PushEquipmentNotification += (orig, characterMaster, equipmentIndex) => {
       orig(characterMaster, EquipmentIndex.None);
-      EquipmentDef equipDef = GetEquipDef(equipmentIndex);
+      EquipmentDef equipDef = GetOrigEquipDef(equipmentIndex);
       if (!characterMaster.hasAuthority){
         Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
         return;
@@ -75,11 +82,11 @@ public class Notifications{
     };
   }
 
-  public ItemDef GetItemDef(ItemIndex itemIndex){
+  public ItemDef GetOrigItemDef(ItemIndex itemIndex){
     return itemNotifications.Find(itemDef => itemDef.itemIndex == itemIndex);
   }
 
-  public EquipmentDef GetEquipDef(EquipmentIndex equipmentIndex){
+  public EquipmentDef GetOrigEquipDef(EquipmentIndex equipmentIndex){
     return equipNotifications.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);
   }
 

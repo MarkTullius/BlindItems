@@ -1,5 +1,14 @@
 # Changelog
 
+**0.4.0**
+
+-   Replace scrap pickup models with "?"
+-   Ensure the stored Item/Equip Def is passed to the notification queue, not the obscured Item/Equip Def
+-   Added a custom notification to show which items are lost when printing or scrapping
+-   Added config to allow for currently Equipment(s) to be shown
+-   Added config to allow an extra level of challenge that randomises your inventory order upon entering a new stage
+-   Corrected position of "?" pickup model in printers to prevent them being buried halfway in the model
+
 **0.3.0**
 
 -   Replace equipment pickup model, icon, name and description with scrap and "???"

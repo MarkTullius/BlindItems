@@ -14,7 +14,7 @@ public class Main : BaseUnityPlugin{
   public const string PluginGUID = PluginAuthor + "." + PluginName;
   public const string PluginAuthor = "MarkTullius";
   public const string PluginName = "BlindItems";
-  public const string PluginVersion = "0.3.0";
+  public const string PluginVersion = "0.4.0";
 
   public static ConfigEntry<bool> RandomiseOrder { get; set; }
   public static ConfigEntry<bool> ObscureEquipment { get; set; }
