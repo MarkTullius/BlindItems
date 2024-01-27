@@ -5,7 +5,8 @@ using UnityEngine.AddressableAssets;
 
 namespace BlindItems;
 
-public class ItemAddressables{
+public class ItemAddressables
+{
   // Custom assets to obscure equipments, lunars and void boss items
   public static readonly AssetBundle assets = AssetBundle.LoadFromFile(System.IO.Path.Combine(Paths.PluginPath, "MarkTullius-BlindItems/blinditemsbundle"));
 
@@ -25,5 +26,4 @@ public class ItemAddressables{
 
   // Risk of Options mod icon
   public static Sprite modIcon = assets.LoadAsset<Sprite>("modIcon.png");
-
 }

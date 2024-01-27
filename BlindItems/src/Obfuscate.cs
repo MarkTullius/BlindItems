@@ -4,18 +4,21 @@ using System.Collections.Generic;
 
 namespace BlindItems;
 
-public class Obfuscate{
+public class Obfuscate
+{
   public const string itemName = "???";
   private const string itemDescription = "?????";
   
   private readonly ItemAddressables _addressables;
 
-  public Obfuscate(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications){    
+  public Obfuscate(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications)
+  {    
     _addressables = new ItemAddressables();
     Awake(itemNotifications, equipNotifications);
   }
 
-  public void Awake(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications){
+  public void Awake(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications)
+  {
     ObfuscateItems(itemNotifications);
     ObfuscateEquipments(equipNotifications);
   }
@@ -61,15 +64,18 @@ public class Obfuscate{
         equipDef.pickupToken = itemDescription;
         equipDef.descriptionToken = itemDescription;
         // If ObscureEquipment bool is set to false then we don't want to overwrite the Equip icon
-        if (Main.ObscureEquipment.Value){
+        if (Main.ObscureEquipment.Value)
+        {
           equipDef.pickupIconSprite = _addressables.equipSprite;
         }
       }
     };
   }
 
-  public Sprite GetPickupIconSprite(ItemTier tier){
-    switch (tier){
+  public Sprite GetPickupIconSprite(ItemTier tier)
+  {
+    switch (tier)
+    {
       case ItemTier.Tier1:
         return _addressables.whiteSprite;
       case ItemTier.Tier2:

@@ -4,39 +4,45 @@ using System.Collections.Generic;
 
 namespace BlindItems;
 
-public class Notifications{
-  List<ItemDef> itemNotifications;
-  List<EquipmentDef> equipNotifications;
+public class Notifications
+{
+  public static List<ItemDef> itemNotifs;
+  public static List<EquipmentDef> equipNotifs;
   private const float AddedNotificationDuration = 6f;
   private const float RemovedNotificationDuration = 3f;
 
-  public Notifications(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications){
-    this.itemNotifications = itemNotifications;
-    this.equipNotifications = equipNotifications;
+  public Notifications(List<ItemDef> itemNotifications, List<EquipmentDef> equipNotifications)
+  {
+    itemNotifs = itemNotifications;
+    equipNotifs = equipNotifications;
     Awake();
   }
 
-  public void Awake(){
+  public void Awake()
+  {
     PushItemNotification();
     PushItemRemovalNotification();
     PushEquipmentNotification();
   }
 
-  public void PushItemNotification(){
+  public void PushItemNotification()
+  {
     On.RoR2.CharacterMasterNotificationQueue.PushItemNotification += (orig, characterMaster, itemIndex) => {
       orig(characterMaster, ItemIndex.None);
 
       ItemDef itemDef = GetOrigItemDef(itemIndex);
       CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
 
-      if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster)){
+      if (ItemNotificationHandler(characterMaster, itemIndex, itemDef, notificationQueueForMaster))
+      {
         float duration = AddedNotificationDuration;
         notificationQueueForMaster.PushNotification(new CharacterMasterNotificationQueue.NotificationInfo(itemDef, null), duration);
       }
     };
   }
 
-  public void PushItemRemovalNotification(){
+  public void PushItemRemovalNotification()
+  {
     On.RoR2.PurchaseInteraction.CreateItemTakenOrb += (orig, effectOrigin, targetObject, itemIndex) => {
       orig(effectOrigin, targetObject, itemIndex);
       BuildItemRemovalNotification(itemIndex);
@@ -47,7 +53,8 @@ public class Notifications{
     };
   }
 
-  public void BuildItemRemovalNotification(ItemIndex itemIndex){
+  public void BuildItemRemovalNotification(ItemIndex itemIndex)
+  {
     CharacterMaster characterMaster = PlayerCharacterMasterController._instances[0].master;
     ItemDef itemDef = GetOrigItemDef(itemIndex);
     CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
@@ -63,7 +70,8 @@ public class Notifications{
     }
   }
 
-  public void PushEquipmentNotification(){
+  public void PushEquipmentNotification()
+  {
     On.RoR2.CharacterMasterNotificationQueue.PushEquipmentNotification += (orig, characterMaster, equipmentIndex) => {
       orig(characterMaster, EquipmentIndex.None);
       EquipmentDef equipDef = GetOrigEquipDef(equipmentIndex);
@@ -72,8 +80,10 @@ public class Notifications{
         return;
       }
       CharacterMasterNotificationQueue notificationQueueForMaster = CharacterMasterNotificationQueue.GetNotificationQueueForMaster(characterMaster);
-      if (notificationQueueForMaster && equipmentIndex != EquipmentIndex.None){
-        if (equipDef == null){
+      if (notificationQueueForMaster && equipmentIndex != EquipmentIndex.None)
+      {
+        if (equipDef == null)
+        {
           return;
         }
         float duration = AddedNotificationDuration;
@@ -82,21 +92,27 @@ public class Notifications{
     };
   }
 
-  public ItemDef GetOrigItemDef(ItemIndex itemIndex){
-    return itemNotifications.Find(itemDef => itemDef.itemIndex == itemIndex);
+  public static ItemDef GetOrigItemDef(ItemIndex itemIndex)
+  {
+    return itemNotifs.Find(itemDef => itemDef.itemIndex == itemIndex);
   }
 
-  public EquipmentDef GetOrigEquipDef(EquipmentIndex equipmentIndex){
-    return equipNotifications.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);
+  public static EquipmentDef GetOrigEquipDef(EquipmentIndex equipmentIndex)
+  {
+    return equipNotifs.Find(equipDef => equipDef.equipmentIndex == equipmentIndex);
   }
 
-  public bool ItemNotificationHandler(CharacterMaster characterMaster, ItemIndex itemIndex, ItemDef itemDef, CharacterMasterNotificationQueue notificationQueue){
-    if (!characterMaster.hasAuthority){
+  public bool ItemNotificationHandler(CharacterMaster characterMaster, ItemIndex itemIndex, ItemDef itemDef, CharacterMasterNotificationQueue notificationQueue)
+  {
+    if (!characterMaster.hasAuthority)
+    {
       Debug.LogError("Can't PushItemNotification for " + Util.GetBestMasterName(characterMaster) + " because they aren't local.");
       return false;
     }
-    if (notificationQueue && itemIndex != ItemIndex.None){
-      if (itemDef == null || itemDef.hidden){
+    if (notificationQueue && itemIndex != ItemIndex.None)
+    {
+      if (itemDef == null || itemDef.hidden)
+      {
         return false;
       }
     }

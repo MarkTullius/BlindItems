@@ -10,7 +10,8 @@ using UnityEngine;
 namespace BlindItems;
 [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
 
-public class Main : BaseUnityPlugin{
+public class Main : BaseUnityPlugin
+{
   public const string PluginGUID = PluginAuthor + "." + PluginName;
   public const string PluginAuthor = "MarkTullius";
   public const string PluginName = "BlindItems";
@@ -27,13 +28,16 @@ public class Main : BaseUnityPlugin{
   public static List<EquipmentDef> equipNotifications;
   public const string desc = "Obscures the pickup models and inventory icons, for items and equipments, by replacing them with '?' to add a cursed challenge where you don't know what you're picking up (scrapping/printing) until you have done so.";
 
-  public void Awake(){
+  public void Awake()
+  {
     InitConfig();
     // Only set up Risk of Options settings if the mod is installed
-    if (Chainloader.PluginInfos.ContainsKey("com.rune580.riskofoptions")){
+    if (Chainloader.PluginInfos.ContainsKey("com.rune580.riskofoptions"))
+    {
       BuildSettings();
     }
-    else{
+    else
+    {
       Debug.Log("Risk of Options is not installed, skipping setup.");
     }
 
@@ -46,7 +50,8 @@ public class Main : BaseUnityPlugin{
     _printerFix = new PrinterFix();
   }
 
-  public void InitConfig(){
+  public void InitConfig()
+  {
     RandomiseOrder = Config.Bind(
         "General"
     ,   "Randomise Item Order Each Stage"
@@ -61,7 +66,8 @@ public class Main : BaseUnityPlugin{
     );
   }
 
-  public void BuildSettings(){
+  public void BuildSettings()
+  {
     ModSettingsManager.SetModDescription(desc, PluginGUID, PluginName);
     ModSettingsManager.SetModIcon(ItemAddressables.modIcon);
     ModSettingsManager.AddOption(new CheckBoxOption(RandomiseOrder));
