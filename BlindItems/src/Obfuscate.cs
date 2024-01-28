@@ -29,14 +29,15 @@ public class Obfuscate
       orig(itemDefs);
       foreach (ItemDef itemDef in itemDefs)
       {
-#pragma warning disable CS0618 // 'ItemDef.deprecatedTier' is incorrectly marked as obsolete
-        if (itemDef.deprecatedTier != ItemTier.NoTier){
           ItemDef itemCopy = ScriptableObject.CreateInstance<ItemDef>();      
           itemCopy.itemIndex = itemDef.itemIndex;
           itemCopy.pickupIconSprite = itemDef.pickupIconSprite;
           itemCopy.nameToken = itemDef.nameToken;
           itemCopy.pickupToken = itemDef.pickupToken;
+          itemCopy.hidden = itemDef.hidden;
           itemNotifications.Add(itemCopy);
+#pragma warning disable CS0618 // 'ItemDef.deprecatedTier' is incorrectly marked as obsolete
+        if (itemDef.deprecatedTier != ItemTier.NoTier){
           itemDef.pickupModelPrefab = PickupCatalog.GetHiddenPickupDisplayPrefab();
           itemDef.nameToken = itemName;
           itemDef.pickupToken = itemDescription;

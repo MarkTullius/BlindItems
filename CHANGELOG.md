@@ -1,5 +1,9 @@
 # Changelog
 
+**0.5.0**
+
+-   Replace GetItemDef() method with custom GetOrigItemDef() method to enable item icons on the game end report
+
 **0.4.1**
 
 -   Add mod icon to Risk of Options
