@@ -15,10 +15,11 @@ public class Main : BaseUnityPlugin
   public const string PluginGUID = PluginAuthor + "." + PluginName;
   public const string PluginAuthor = "MarkTullius";
   public const string PluginName = "BlindItems";
-  public const string PluginVersion = "0.5.0";
+  public const string PluginVersion = "0.5.1";
 
   public static ConfigEntry<bool> RandomiseOrder { get; set; }
   public static ConfigEntry<bool> ObscureEquipment { get; set; }
+  public static ConfigEntry<bool> ObscureNotifs { get; set; }
 
   private Obfuscate _obfuscate;
   private Notifications _notifs;
@@ -46,7 +47,8 @@ public class Main : BaseUnityPlugin
     equipNotifications = new List<EquipmentDef>();
 
     _obfuscate = new Obfuscate(itemNotifications, equipNotifications);
-    _notifs = new Notifications(itemNotifications, equipNotifications);
+    if(!ObscureNotifs.Value)
+      _notifs = new Notifications(itemNotifications, equipNotifications);
     _randomise = new Randomise();
     _printerFix = new PrinterFix();
     _itemInventory = new ItemInventory();
@@ -65,6 +67,12 @@ public class Main : BaseUnityPlugin
     ,   "Obscure Current Equipment"
     ,   true
     ,   "Turn off to retain the icon for your currently held equipment(s). Requires a restart"
+    );
+    ObscureNotifs = Config.Bind(
+        "General"
+    ,   "Obscure Notifications"
+    ,   false
+    ,   "Turn off to retain the icon and descriptions upon pickup/printing/scrapping. Requires a restart"
     );
   }
 

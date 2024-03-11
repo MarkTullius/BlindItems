@@ -1,5 +1,9 @@
 # Changelog
 
+**0.5.1**
+
+-   Added config option to obscure notifications
+
 **0.5.0**
 
 -   Replace GetItemDef() method with custom GetOrigItemDef() method to enable item icons on the game end report
