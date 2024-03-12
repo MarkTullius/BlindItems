@@ -2,11 +2,11 @@
   "name": "BlindItems",
   "author": "MarkTullius",
   "authorName": "MarkTullius",
-  "version_number": "0.5.1",
+  "version_number": "1.0.0",
   "website_url": "",
   "description": "Obscures the pickup models and inventory icons, for items and equipments, by replacing them with '?' to add a cursed challenge where you don't know what you're picking up (scrapping/printing) until you have done so.",
   "dependencies": [
-    "bbepis-BepInExPack-5.4.*",
-    "RiskofThunder-HookGenPatcher-1.2.*"
+    "bbepis-BepInExPack-5.4.2100",
+    "RiskofThunder-HookGenPatcher-1.2.3"
   ]
 }

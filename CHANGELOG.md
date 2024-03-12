@@ -1,5 +1,10 @@
 # Changelog
 
+**1.0.0**
+
+-   Assign correct equipment icon on run report if using HistoryFix
+-   Release
+
 **0.5.1**
 
 -   Added config option to obscure notifications
